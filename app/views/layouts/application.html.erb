@@ -8,13 +8,25 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <% if flash[:error] %>
-    <div class="flash error"><%= flash[:error]%></div>
-  <% end %>
-  <% if flash[:notice] %>
-    <div class="flash notice"><%= flash[:notice]%></div>
-  <% end %>
+  <nav class="navbar navbar-inverse">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">SaneBox Test</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <% if flash[:error] %>
+      <div class="flash error"><%= flash[:error]%></div>
+    <% end %>
+    <% if flash[:notice] %>
+      <div class="flash notice"><%= flash[:notice]%></div>
+    <% end %>
 
-  <%= yield %>
+    <%= yield %>
+  </div>
+
 </body>
 </html>
+
+

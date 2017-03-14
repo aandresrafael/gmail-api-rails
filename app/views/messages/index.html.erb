@@ -1,2 +1,12 @@
-<h1>Messages#index</h1>
-<p>Find me in app/views/messages/index.html.erb</p>
+<div class="row">
+  <h2>Inbox</h2>
+  <p>
+    This is a Ruby on Rails web application that allows users list their inbox list emails.
+  </p>
+
+  <%= link_to "Connect to Gmail Inbox", google_oauth_path, class: 'btn btn-info', id: 'show-more' %>
+</div>
+
+<div>
+  <%= @messages.inspect %>
+</div>
