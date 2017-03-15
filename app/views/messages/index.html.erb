@@ -1,14 +1,12 @@
 <div class="row">
   <h2>Inbox</h2>
-  <p>
-    This is a Ruby on Rails web application that allows users list their inbox list emails.
-  </p>
+  <h4>
+    This is a Ruby on Rails web application that allows users list their inbox list emails grouped by 'from'.
+  </h4>
 
-  <%= link_to "Connect to Gmail Inbox", google_oauth_path, class: 'btn btn-info', id: 'show-more' %>
+  <%= link_to "Connect to Gmail Inbox", google_oauth_path, class: 'btn btn-info', id: 'show-more' unless session[:google_access_token] %>
 </div>
 
 <div>
   <%= react_component 'Messages', { data: @data } %>
 </div>
-<%= session[:google_access_token].inspect %>
-<%= @auth.inspect %>
