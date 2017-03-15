@@ -12,11 +12,19 @@ class MessagesController < ApplicationController
     api_client.authorization = auth
 
     user_id = session[:google_access_token]['user_id']
-    next_page = params[:next_page]
-    gmail_client = SaneBox::GmailClient.new(api_client, user_id, next_page)
+    @next_page = params[:next_page]
+    gmail_client = SaneBox::GmailClient.new(api_client, user_id, @next_page)
+    messages_ids = gmail_client.inbox_messages_ids
 
-    @data = {messages: gmail_client.inbox_messages_grouped }
+    messages = Rails.cache.fetch("inbox messages page:#{@next_page.to_s}",
+      expires_in: cache_expire,
+      race_condition_ttl: race_condition_ttl) do
+
+      gmail_client.inbox_messages_grouped(messages_ids)
+    end
+
     @next_page = gmail_client.next_page
+    @data = {messages: messages }
   end
 
 end

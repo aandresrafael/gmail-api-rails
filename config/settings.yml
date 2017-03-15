@@ -1,0 +1,12 @@
+development:
+  cache_expiry: 10
+  cache_race_ttl: 3
+  per_page: 20
+test:
+  cache_expiry: 10
+  cache_race_ttl: 3
+  per_page: 20
+production:
+  cache_expiry: 10
+  cache_race_ttl: 3
+  per_page: 20

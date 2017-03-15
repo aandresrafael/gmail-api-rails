@@ -4,6 +4,7 @@ require 'google/api_client/client_secrets'
 module SaneBox
   class GClient
     class << self
+      #Initialize the Google Apli Client with authorization
       def client
         api_client = get_client
         client_secrets = Google::APIClient::ClientSecrets.load(client_credentials)
@@ -19,6 +20,7 @@ module SaneBox
         Rails.root.join( 'config/client_secret.json' )
       end
 
+      #Initialize the Google Apli Client.
       def get_client
         Google::APIClient.new(
           application_name: 'SaneBox Interview',
@@ -28,7 +30,7 @@ module SaneBox
   end
 
   class GmailClient
-    attr_accessor :next_page
+    attr_accessor :next_page, :messages_ids
     def initialize(api_client, user_id, next_page)
       @api_client = api_client
       @gmail =  api_client.discovered_api( 'gmail', 'v1' )
@@ -36,6 +38,8 @@ module SaneBox
       @next_page = next_page
     end
 
+    #Make the api call to get the messages lists ids according the page
+    # @return [Array] of messages ids.
     def inbox_messages_ids
       parameters = { userId: @user_id, labelIds: 'INBOX' }
       parameters[:pageToken] = @next_page if @next_page
@@ -46,13 +50,15 @@ module SaneBox
       )
 
       @next_page = result.next_page_token
-      messages = result.data.messages
-      messages.map(&:id)
+      result.data.messages.map(&:id)
     end
 
-    def inbox_messages_grouped
+    #Perform the api call for each message
+    # @param messages_ids [Array] of  messages ids.
+    # @return [Array] of hashes with from, to and subject grouped by 'from'
+    def inbox_messages_grouped(messages_ids)
       messages = []
-      inbox_messages_ids.each do |message_id|
+      messages_ids.each do |message_id|
         message = @api_client.execute!(
           api_method: @gmail.users.messages.get,
           parameters:{

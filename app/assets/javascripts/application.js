@@ -17,3 +17,10 @@
 //= require react_ujs
 //= require components
 //= require_tree .
+
+
+jQuery(document).ready(function ($) {
+  $('#show-more').on('click', function() {
+    $('.loader').show();
+  });
+});
