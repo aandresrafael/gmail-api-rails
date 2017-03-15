@@ -4,42 +4,15 @@ class MessagesController < ApplicationController
     return unless session[:google_access_token]
 
     api_client = SaneBox::GClient.get_client
-    auth = api_client.authorization.dup
-    auth.update_token!(session[:google_access_token])
-    api_client.authorization = auth
+    @auth = api_client.authorization.dup
+    @auth.update_token!(session[:google_access_token])
 
-    gmail =  api_client.discovered_api( 'gmail', 'v1' )
+    api_client.authorization = @auth
+
     user_id = session[:google_access_token]['user_id']
+    gmail_client = SaneBox::GmailClient.new(api_client, user_id)
 
-
-    result =  api_client.execute!(
-        api_method: gmail.users.messages.list,
-        parameters:{
-          userId: user_id,
-          labelIds: 'INBOX',
-          maxResults: 2
-        }
-      )
-
-    messages = result.data.messages
-    messages_ids = messages.map(&:id)
-
-    @messages = []
-    messages_ids.each do |message_id|
-      message = api_client.execute!(
-        api_method: gmail.users.messages.get,
-        parameters:{
-          userId: user_id,
-          id: message_id
-        }
-      )
-      headers = message.data.payload.headers
-      from = headers.find { |h| h.name == 'From' }.value
-      to = headers.find { |h| h.name == 'To'}.value
-      subject = headers.find { |h| h.name == 'Subject'}.value
-      @messages <<  [from, to, subject]
-    end
-
+    @data = {messages: gmail_client.inbox_messages_grouped }
   end
 
 end
