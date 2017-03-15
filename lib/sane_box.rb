@@ -28,22 +28,24 @@ module SaneBox
   end
 
   class GmailClient
-    def initialize(api_client, user_id)
+    attr_accessor :next_page
+    def initialize(api_client, user_id, next_page)
       @api_client = api_client
       @gmail =  api_client.discovered_api( 'gmail', 'v1' )
       @user_id = user_id
+      @next_page = next_page
     end
 
     def inbox_messages_ids
-      result =  @api_client.execute!(
-          api_method: @gmail.users.messages.list,
-          parameters:{
-            userId: @user_id,
-            labelIds: 'INBOX',
-            maxResults: 10
-          }
-        )
+      parameters = { userId: @user_id, labelIds: 'INBOX' }
+      parameters[:pageToken] = @next_page if @next_page
 
+      result =  @api_client.execute!(
+        api_method: @gmail.users.messages.list,
+        parameters: parameters
+      )
+
+      @next_page = result.next_page_token
       messages = result.data.messages
       messages.map(&:id)
     end
@@ -59,9 +61,9 @@ module SaneBox
           }
         )
         headers = message.data.payload.headers
-        from = headers.find { |h| h.name == 'From' }.value
-        to = headers.find { |h| h.name == 'To'}.value
-        subject = headers.find { |h| h.name == 'Subject'}.value
+        from = headers.find { |h| h.name == 'From' }.try(:value)
+        to = headers.find { |h| h.name == 'To'}.try(:value)
+        subject = headers.find { |h| h.name == 'Subject'}.try(:value)
 
         messages <<  { from: from, to: to, subject: subject }
       end

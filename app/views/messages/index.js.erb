@@ -1,0 +1,3 @@
+jQuery("#messages-list").append("<%= escape_javascript(render partial: 'messages') %>");
+jQuery("#show-more").attr('href', "<%= root_path(next_page: @next_page) %>");
+ReactRailsUJS.mountComponents();

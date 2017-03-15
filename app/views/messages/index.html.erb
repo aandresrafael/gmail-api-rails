@@ -8,5 +8,15 @@
 </div>
 
 <div>
-  <%= react_component 'Messages', { data: @data } %>
+  <div id='messages-list'>
+    <%= render partial: 'messages' %>
+  </div>
+
+  <% if @next_page %>
+    <div class="row mt-20">
+      <%= link_to "Show more",root_path(next_page: @next_page), method: :get, remote: true, class: 'btn btn-primary btn-lg btn-block', id: 'show-more'
+      %>
+    </div>
+  <% end %>
 </div>
+

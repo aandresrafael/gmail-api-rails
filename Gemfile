@@ -11,7 +11,7 @@ gem 'slim'
 gem 'bourbon'
 gem 'font-awesome-rails', '~> 4.2'
 gem 'bootstrap-sass'
-gem 'google-api-client', require: 'google/api_client'
+gem 'google-api-client', '~> 0.8.0'
 gem 'react-rails'
 
 group :development do

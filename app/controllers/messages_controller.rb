@@ -12,9 +12,11 @@ class MessagesController < ApplicationController
     api_client.authorization = auth
 
     user_id = session[:google_access_token]['user_id']
-    gmail_client = SaneBox::GmailClient.new(api_client, user_id)
+    next_page = params[:next_page]
+    gmail_client = SaneBox::GmailClient.new(api_client, user_id, next_page)
 
     @data = {messages: gmail_client.inbox_messages_grouped }
+    @next_page = gmail_client.next_page
   end
 
 end
