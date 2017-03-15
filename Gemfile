@@ -12,7 +12,7 @@ gem 'bourbon'
 gem 'font-awesome-rails', '~> 4.2'
 gem 'bootstrap-sass'
 gem 'google-api-client', require: 'google/api_client'
-gem "oauth2"
+gem 'react-rails'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
