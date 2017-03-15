@@ -4,7 +4,7 @@ class OauthController < ApplicationController
 
   def index
     auth = @api_client.authorization.dup
-    auth.redirect_uri = 'http://localhost:3000/google/oauth2/callback'
+    auth.redirect_uri = SaneBox::GClient::REDIRECT_URL
 
     auth.update_token!(empty_hash_or_saved_oauth2_credentials)
     redirect_to auth.authorization_uri.to_s
@@ -12,7 +12,7 @@ class OauthController < ApplicationController
 
   def callback
     auth = @api_client.authorization.dup
-    auth.redirect_uri = 'http://localhost:3000/google/oauth2/callback'
+    auth.redirect_uri = SaneBox::GClient::REDIRECT_URL
     auth.update!( params )
     auth.fetch_access_token!
 

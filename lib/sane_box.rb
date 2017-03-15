@@ -3,6 +3,8 @@ require 'google/api_client/client_secrets'
 
 module SaneBox
   class GClient
+    REDIRECT_URL = 'http://localhost:3000/google/oauth2/callback'
+
     class << self
       #Initialize the Google Apli Client with authorization
       def client
@@ -26,6 +28,7 @@ module SaneBox
           application_name: 'SaneBox Interview',
           application_version: '0.0.1' )
       end
+
     end
   end
 
