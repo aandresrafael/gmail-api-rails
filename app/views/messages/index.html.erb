@@ -8,5 +8,7 @@
 </div>
 
 <div>
-  <%= @messages.inspect %>
+  <%= react_component 'Messages', { data: @data } %>
 </div>
+<%= session[:google_access_token].inspect %>
+<%= @auth.inspect %>
